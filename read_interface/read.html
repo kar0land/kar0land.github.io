@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leitor - O Castelo Andante</title>
+
+    <link rel="stylesheet" href="read.css">
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Lexend:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,300,0,0" rel="stylesheet" />
+
+</head>
+<body>
+
+    <!-- OVERLAY DO MENU -->
+    <div id="overlay" class="overlay" onclick="fecharDefinicoes()"></div>
+
+    <!-- POPUP FLUTUANTE DE CORES DO TEXTO -->
+    <div id="highlight-popup">
+        <div class="popup-colors">
+            <div class="popup-color color-yellow" data-color="yellow"></div>
+            <div class="popup-color color-green" data-color="green"></div>
+            <div class="popup-color color-blue" data-color="blue"></div>
+            <div class="popup-color color-red" data-color="red"></div>
+            <div class="popup-color color-purple" data-color="purple"></div>
+        </div>
+    </div>
+
+    <!-- PAINEL POMODORO / MÚSICA -->
+    <div id="pomodoro-popup" class="pomodoro-popup" onmouseleave="fecharPomodoro()">
+        <div class="pomo-header">
+            <h3>Modo Foco</h3>
+            <button onclick="fecharPomodoro()" class="pomo-close">Fechar</button>
+        </div>
+        
+        <div class="pomo-tabs">
+            <button class="pomo-tab-btn active" onclick="mudarAbaPomo('pomodoro')">🍅 Pomodoro</button>
+            <button class="pomo-tab-btn" onclick="mudarAbaPomo('musica')">🎵 Música</button>
+        </div>
+        
+        <div id="pomo-aba-pomodoro" class="pomo-content active">
+            <div class="pomo-label">Tempo de Foco</div>
+            <div class="pomo-timer" id="timer-display">25:00</div>
+            <div class="pomo-controls">
+                <button class="btn-start" id="btn-timer-start" onclick="toggleTimer()">
+                    <span class="material-symbols-rounded" style="font-size:18px;">play_arrow</span> Start
+                </button>
+                <button class="btn-reset" onclick="resetTimer()">
+                    <span class="material-symbols-rounded" style="font-size:20px;">refresh</span>
+                </button>
+            </div>
+        </div>
+
+        <div id="pomo-aba-musica" class="pomo-content">
+            <div class="musica-header">
+                <div class="pomo-label">Música de Fundo</div>
+                <span class="material-symbols-rounded" style="font-size:20px; cursor:pointer;">volume_mute</span>
+            </div>
+            <div class="musica-list">
+                <div class="musica-item" onclick="selecionarMusica(this)">🌊 Ocean Waves</div>
+                <div class="musica-item" onclick="selecionarMusica(this)">🌧️ Rain Sounds</div>
+                <div class="musica-item" onclick="selecionarMusica(this)">🎶 Lo-fi Music</div>
+                <div class="musica-item" onclick="selecionarMusica(this)">🔥 Fireplace</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAINEL LATERAL DE ASPETO -->
+    <aside id="side-panel" class="side-panel">
+        <div class="panel-header">
+            <h2>Aspeto</h2>
+            <button class="icon-btn" onclick="fecharDefinicoes()"><span class="material-symbols-rounded">close</span></button>
+        </div>
+
+        <div class="panel-tabs">
+            <button class="tab-btn active" onclick="mudarAba('texto')"><span class="material-symbols-rounded">match_case</span>Texto</button>
+            <button class="tab-btn" onclick="mudarAba('tema')"><span class="material-symbols-rounded">contrast</span>Tema</button>
+            <button class="tab-btn" onclick="mudarAba('leitura')"><span class="material-symbols-rounded">menu_book</span>Leitura</button>
+            <button class="tab-btn" onclick="mudarAba('notas')"><span class="material-symbols-rounded">sticky_note_2</span>Notas</button>
+        </div>
+
+        <div class="panel-content">
+            <!-- ABA 1: TEXTO -->
+            <div id="aba-texto" class="tab-section active">
+                <div class="option-group-title">Fonte</div>
+                
+                <div class="option-card" onclick="mudarFonte('Georgia, serif', this)"><div class="option-card-header"><div class="option-info"><div class="option-title">Serif</div><div class="option-desc" style="font-family: Georgia, serif;">The quick brown fox jumps over the lazy dog</div></div></div></div>
+                
+                <div class="option-card" onclick="mudarFonte('Arial, sans-serif', this)"><div class="option-card-header"><div class="option-info"><div class="option-title">Sans Serif</div><div class="option-desc" style="font-family: Arial, sans-serif;">The quick brown fox jumps over the lazy dog</div></div></div></div>
+                
+                <div class="option-card" onclick="mudarFonte('Courier New, monospace', this)"><div class="option-card-header"><div class="option-info"><div class="option-title">Monospace</div><div class="option-desc" style="font-family: monospace;">The quick brown fox jumps over the lazy dog</div></div></div></div>
+                
+                <div class="option-card" onclick="mudarFonte('Open Dyslexic, sans-serif', this)"><div class="option-card-header"><div class="option-info"><div class="option-title">OpenDyslexic</div><div class="option-desc font-dyslexic">The quick brown fox jumps over the lazy dog</div></div></div></div>
+                
+                <div class="option-card active" onclick="mudarFonte('Atkinson Hyperlegible, sans-serif', this)"><div class="option-card-header"><div class="option-info"><div class="option-title">Atkinson Hyperlegible</div><div class="option-desc" style="font-family: Atkinson Hyperlegible;">The quick brown fox jumps over the lazy dog</div></div></div></div>
+                
+                <div class="option-card" onclick="mudarFonte('Bionic Reading, sans-serif', this)"><div class="option-card-header"><div class="option-info"><div class="option-title">Bionic Reading</div><div class="option-desc font-bionic">The quick brown fox jumps over the lazy dog</div></div></div></div>
+                
+                <div class="option-card" onclick="mudarFonte('Lexend, sans-serif', this)"><div class="option-card-header"><div class="option-info"><div class="option-title">Lexend</div><div class="option-desc" style="font-family: Lexend;">The quick brown fox jumps over the lazy dog</div></div></div></div>
+
+                <div class="slider-container">
+                    <div class="slider-header"><span>Tamanho da fonte:</span> <span id="font-size-val">20px</span></div>
+                    <input type="range" min="14" max="36" value="20" oninput="mudarTamanhoFonte(this.value); atualizarCorSlider(this)">
+                </div>
+                <div class="slider-container">
+                    <div class="slider-header"><span>Altura da Linha:</span> <span id="line-height-val">1.8</span></div>
+                    <input type="range" min="1.2" max="2.5" step="0.1" value="1.8" oninput="mudarAlturaLinha(this.value); atualizarCorSlider(this)">
+                </div>
+                <div class="slider-container">
+                    <div class="slider-header"><span>Margens:</span> <span id="margin-val">20px</span></div>
+                    <input type="range" min="0" max="150" value="20" oninput="mudarMargens(this.value); atualizarCorSlider(this)">
+                </div>
+            </div>
+
+            <!-- ABA 2: TEMA -->
+            <div id="aba-tema" class="tab-section">
+                <div class="option-group-title">Cor de Fundo</div>
+                <div class="option-card active" onclick="aplicarTema('fafafa', '333333', this)"><div class="option-card-header"><div class="color-swatch" style="background: #fafafa;"></div><div class="option-info"><div class="option-title">Light</div><div class="option-desc">Ideal para leitura diurna</div></div></div></div>
+                <div class="option-card" onclick="aplicarTema('F4ECD8', '433422', this)"><div class="option-card-header"><div class="color-swatch" style="background: #F4ECD8;"></div><div class="option-info"><div class="option-title">Sépia</div><div class="option-desc">Tom quente e suave para os olhos</div></div></div></div>
+                <div class="option-card" onclick="aplicarTema('FEE3D4', '4a3b34', this)"><div class="option-card-header"><div class="color-swatch" style="background: #FEE3D4;"></div><div class="option-info"><div class="option-title">Peach</div><div class="option-desc">Estimulante para uma leitura rápida</div></div></div></div>
+                <div class="option-card" onclick="aplicarTema('EBF0F5', '2c3e50', this)"><div class="option-card-header"><div class="color-swatch" style="background: #EBF0F5;"></div><div class="option-info"><div class="option-title">Cool Blue</div><div class="option-desc">Foco profundo e uma leitura calma</div></div></div></div>
+                <div class="option-card" onclick="aplicarTema('1e3a5f', 'd1dceb', this)"><div class="option-card-header"><div class="color-swatch" style="background: #1e3a5f;"></div><div class="option-info"><div class="option-title">Night Blue</div><div class="option-desc">Reduz o cansaço visual à noite</div></div></div></div>
+                <div class="option-card" onclick="aplicarTema('1b262a', 'e0e0e0', this)"><div class="option-card-header"><div class="color-swatch" style="background: #1b262a;"></div><div class="option-info"><div class="option-title">Dark</div><div class="option-desc">Reduz o cansaço visual à noite</div></div></div></div>
+            </div>
+
+            <!-- ABA 3: LEITURA -->
+            <div id="aba-leitura" class="tab-section">
+                <div class="option-group-title">Modo de Leitura</div>
+                
+                <div class="option-card active" onclick="mudarModoLeitura('normal', this)">
+                    <div class="option-card-header">
+                        <div class="option-info">
+                            <div class="option-title">Leitura Normal</div>
+                            <div class="option-desc">Experiência de leitura tradicional</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARTÃO DA LEITURA ACOMPANHADA -->
+                <div class="option-card" id="card-acompanhado" onclick="mudarModoLeitura('acompanhado', this)">
+                    <div class="option-card-header">
+                        <div class="option-info">
+                            <div class="option-title">Leitura Acompanhada</div>
+                            <div class="option-desc">Narração áudio com destaque de texto personalizável</div>
+                        </div>
+                    </div>
+                    <div id="opcoes-acompanhado" style="display:none; width: 100%; margin-top: 10px; border-top: 1px solid var(--border-color); padding-top: 12px;" onclick="event.stopPropagation()">
+                        <div class="setting-toggle-row">
+                            <span>Narração de Áudio</span>
+                            <label class="switch"><input type="checkbox" id="tgl-narracao" checked onchange="toggleNarracao()"><span class="slider-toggle"></span></label>
+                        </div>
+                        <div class="setting-toggle-row">
+                            <span>Mostrar Texto</span>
+                            <label class="switch"><input type="checkbox" id="tgl-mostrar-texto" checked onchange="toggleMostrarTexto()"><span class="slider-toggle"></span></label>
+                        </div>
+                        <div class="setting-toggle-row">
+                            <span>Marcador de Texto</span>
+                            <label class="switch"><input type="checkbox" id="tgl-marcador" checked onchange="toggleMarcador()"><span class="slider-toggle"></span></label>
+                        </div>
+
+                        <div id="grupo-estilo-destaque">
+                            <div style="font-size: 0.85rem; font-weight: 700; margin-top: 10px; margin-bottom: 6px;">Estilo do Destaque</div>
+                            <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+                                <div class="option-card active" id="btn-estilo-linha" onclick="mudarEstiloDestaque('linha', this); event.stopPropagation()" style="flex:1; justify-content:center; padding:6px; font-size:0.8rem; margin-bottom:0;">Linha a Linha</div>
+                                <div class="option-card" id="btn-estilo-palavra" onclick="mudarEstiloDestaque('palavra', this); event.stopPropagation()" style="flex:1; justify-content:center; padding:6px; font-size:0.8rem; margin-bottom:0;">Palavra a Palavra</div>
+                            </div>
+                        </div>
+
+                        <div class="slider-container" style="margin-top: 15px;">
+                            <div class="slider-header" style="font-size:0.85rem;"><span>Velocidade:</span> <span id="tts-speed-val">1.0x</span></div>
+                            <input type="range" min="0.5" max="2.0" step="0.1" value="1.0" oninput="mudarVelocidadeTTS(this.value); atualizarCorSlider(this)">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARTÃO DO MODO FOCO -->
+                <div class="option-card" id="card-foco" onclick="mudarModoLeitura('foco', this)">
+                    <div class="option-card-header">
+                        <div class="option-info">
+                            <div class="option-title">Modo Foco</div>
+                            <div class="option-desc">Uma frase de cada vez, régua de leitura e blur ajustável</div>
+                        </div>
+                    </div>
+                    <div id="opcoes-foco" style="display:none; width: 100%; margin-top: 10px; border-top: 1px solid var(--border-color); padding-top: 12px;" onclick="event.stopPropagation()">
+                        <div style="font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">Estilo de Foco</div>
+                        <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+                            <div class="option-card active" id="btn-foco-regua" onclick="mudarEstiloFoco('regua', this); event.stopPropagation()" style="flex:1; justify-content:center; padding:6px; font-size:0.8rem; margin-bottom:0;">Réguas de Leitura</div>
+                            <div class="option-card" id="btn-foco-blur" onclick="mudarEstiloFoco('blur', this); event.stopPropagation()" style="flex:1; justify-content:center; padding:6px; font-size:0.8rem; margin-bottom:0;">Blur</div>
+                        </div>
+
+                        <div class="slider-container" id="container-blur-slider" style="margin-top: 10px; display: none;">
+                            <div class="slider-header" style="font-size:0.85rem;"><span>Intensidade Blur:</span> <span id="blur-val">4px</span></div>
+                            <input type="range" min="1" max="10" value="4" oninput="mudarIntensidadeBlur(this.value); atualizarCorSlider(this)">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- CARTÃO RSVP -->
+                <div class="option-card" id="card-rsvp" onclick="mudarModoLeitura('rsvp', this)">
+                    <div class="option-card-header">
+                        <div class="option-info">
+                            <div class="option-title">RSVP - Leitura Rápida</div>
+                            <div class="option-desc">Uma palavra de cada vez com ponto ORP em destaque</div>
+                        </div>
+                    </div>
+                    <div id="opcoes-rsvp" style="display:none; width: 100%; margin-top: 10px; border-top: 1px solid var(--border-color); padding-top: 12px;" onclick="event.stopPropagation()">
+                        <div class="slider-container" style="margin-top: 5px;">
+                            <div class="slider-header" style="font-size:0.85rem;"><span>Velocidade RSVP:</span> <span id="rsvp-speed-val">300 WPM</span></div>
+                            <input type="range" min="100" max="800" step="25" value="300" oninput="mudarVelocidadeRSVP(this.value); atualizarCorSlider(this)">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="option-group-title">Modo de Navegação</div>
+                <div style="display: flex; gap: 10px;">
+                    <div class="option-card" onclick="mudarModoNavegacao('swipe', this)" style="flex:1; justify-content:center; padding:10px; margin-bottom:0;"><div class="option-title" style="margin:0;">Swipe</div></div>
+                    <div class="option-card active" onclick="mudarModoNavegacao('scroll', this)" style="flex:1; justify-content:center; padding:10px; margin-bottom:0;"><div class="option-title" style="margin:0;">Scroll</div></div>
+                </div>
+            </div>
+
+            <!-- ABA 4: NOTAS -->
+            <div id="aba-notas" class="tab-section">
+                <div class="option-group-title"><span class="material-symbols-rounded" style="font-size:16px; vertical-align:middle;">bookmark</span> Marcador</div>
+                <ul id="saved-bookmarks">
+                    <div id="empty-bookmarks" class="empty-state">Nenhum marcador definido.</div>
+                </ul>
+
+                <div class="option-group-title"><span class="material-symbols-rounded" style="font-size:16px; vertical-align:middle;">edit</span> Highlights</div>
+                <ul id="saved-highlights">
+                    <div id="empty-highlights" class="empty-state">Selecione texto no livro para o ver aqui.</div>
+                </ul>
+            </div>
+        </div>
+    </aside>
+
+    <!-- CABEÇALHO DO LEITOR & MENU DE CAPÍTULOS -->
+    <header class="top-bar">
+        <div class="header-left">
+            <button class="icon-btn" onclick="sairDoLivro()"><span class="material-symbols-rounded">arrow_back_ios_new</span></button>
+        </div>
+        
+        <div class="book-info-container">
+            <div class="book-title-wrapper">
+                <span class="book-title" id="header-book-title">Capítulo 1</span>
+                <span class="material-symbols-rounded chevron-icon">expand_more</span>
+            </div>
+            <div class="book-author">Diana Wynne Jones</div>
+            
+            <div class="chapters-dropdown" id="chapters-list">
+                <!-- Capítulos gerados dinamicamente via JS -->
+            </div>
+        </div>
+
+        <div class="header-right">
+            <button class="icon-btn" onclick="guardarCapitulo()"><span class="material-symbols-rounded" id="bookmark-icon-btn">bookmark_border</span></button>
+            <button class="icon-btn" onclick="abrirPomodoro()"><span class="material-symbols-rounded">timer</span></button>
+            <button class="icon-btn" onclick="abrirDefinicoes()"><span class="material-symbols-rounded">tune</span></button>
+        </div>
+    </header>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="content-area" id="leitura-scroll">
+        <article class="text-container" id="texto-livro">
+
+            <div id="tts-line-overlay" class="tts-line-overlay"></div>
+            
+            <!-- CAPÍTULO 1 -->
+            <section class="chapter-section active" id="cap-1" data-title="Capítulo Um">
+                <h1 class="chapter-title">Capítulo Um</h1>
+                <h2 class="chapter-subtitle">Em que Sophie fala com os chapéus</h2>
+                <p>Na terra de Ingary, onde coisas como botas de sete léguas e capas da invisibilidade realmente existem, é uma grande desgraça nascer a mais velha de três irmãs. Todos sabem que será a primeira a falhar, e a pior, se as três se aventurarem em busca de fortuna.</p>
+                <p>Sophie Hatter era a mais velha de três irmãs. Nem sequer era filha de um pobre lenhador, o que lhe poderia ter dado alguma hipótese de sucesso. Os seus pais eram abastados e tinham uma chapelaria feminina na próspera cidade de Market Chipping. É verdade que a sua mãe morreu quando Sophie tinha dois anos e a sua irmã Lettie, um, e o seu pai casou com a sua assistente mais nova, uma linda loira chamada Fanny. Fanny deu logo à luz a terceira irmã, Martha. Isto deveria ter transformado Sophie e Lettie nas Irmãs Feias, mas, na verdade, as três meninas cresceram muito bonitas, embora Lettie fosse considerada a mais bela por todos. Fanny tratou todas as três raparigas com a mesma gentileza e não favoreceu em nada Martha.</p>
+                <p>O Sr. Hatter tinha orgulho nas suas três filhas e inscreveu-as na melhor escola da cidade. Sophie era a mais estudiosa. Lia muito e cedo percebeu as poucas hipóteses que tinha de um futuro interessante. Foi uma desilusão para ela, mas ainda assim era feliz a cuidar das irmãs e a preparar Martha para ir buscar a sua fortuna quando chegasse a altura. Como Fanny estava sempre ocupada na loja, Sophie era quem tomava conta das duas mais novas. Havia uma certa gritaria e puxões de cabelo entre elas. Lettie não se conformava em ser aquela que, depois de Sophie, seria a menos bem-sucedida.</p>
+                <p>"Não é justo!", gritava Lettie. "Porque é que a Martha há-de ter tudo só porque nasceu a mais nova? Eu vou casar com um príncipe, e pronto!"</p>
+                <p>Ao que Martha sempre retorquiu que acabaria por ser absurdamente rica sem ter de casar com ninguém.</p>
+                <p>Então, Sophie tinha de as separar e remendar as suas roupas. Era muito habilidosa com a agulha. Com o tempo, também fez roupas para as suas irmãs. Havia um conjunto rosa-escuro que ela fez para Lettie, no Dia de Maio, antes do início desta história, que Fanny disse parecer ter vindo da loja mais cara de Kingsbury.</p>
+            </section>
+
+            <!-- CAPÍTULO 2 -->
+            <section class="chapter-section" id="cap-2" data-title="Capítulo Dois">
+                <h1 class="chapter-title">Capítulo Dois</h1>
+                <h2 class="chapter-subtitle">Em que Sophie é forçada a fazer-se à vida</h2>
+                <p>– O quê? – Sophie olhou intensamente para a rapariga sentada à sua frente. Ela parecia a Lettie. Estava com o segundo melhor vestido de Lettie, de um azul maravilhoso que lhe assentava na perfeição. E tinha o cabelo negro e os olhos azuis de Lettie.</p>
+                <p>– Sou a Martha – respondeu a irmã. – Quem é que apanhaste a cortar as ceroulas de seda da Lettie? Eu não contei à Lettie. Tu contaste?</p>
+                <p>– Não – replicou Sophie , completamente estupefacta. Prestando maior atenção, apercebeu-se de que era mesmo Martha. A cabeçade Lettie estava um pouco inclinada como Martha fazia, e as mãos cobriam os joelhos enquanto os polegares faziam pequenos círculos, outro hábito de Martha.</p>
+                <p>“Tive medo de que me viesses ver”, disse Martha, “porque sabia que teria de te contar. É um alívio agora que te contei. Promete que não vais contar a ninguém. Eu sei que não contará se prometer. És tão honrada.”</p>
+                <p>“Eu prometo”, disse Sophie. “Mas porquê? Como?” “Eu e a Lettie combinámos isso”, disse Martha, rodando os polegares, “porque a Lettie queria aprender bruxaria e eu não. A Lettie é inteligente e quer um futuro em que possa usar a sua inteligência – tenta dizer isso à mamã! A mamã tem tanta inveja da Lettie que nem admite que ela é inteligente!”</p>
+                <p>Sophie não conseguia acreditar que Fanny fosse assim, mas deixou passar. “Mas e você?”</p>
+                <p>“Coma o seu bolo”, disse Martha. “É bom. Ah, sim, também posso ser esperta."</p>
+            </section>
+
+            <!-- CAPÍTULO 3 -->
+            <section class="chapter-section" id="cap-3" data-title="Capítulo Três">
+                <h1 class="chapter-title">Capítulo Três</h1>
+                <h2 class="chapter-subtitle">Em que Sophie entra num castelo e num negócio</h2>
+                <p>Havia uma grande porta preta na parede preta em frente a Sophie, e ela caminhou na sua direção, coxeando rapidamente. O castelo era mais feio do que nunca de perto. Era demasiado alto para a sua altura e não tinha uma forma muito regular. Tanto quanto Sophie conseguia ver na escuridão crescente, era construído a partir de enormes blocos negros, como carvão, e, tal como carvão, os blocos tinham formas e tamanhos diferentes. Um ar frio emanava destes blocos à medida que se aproximava, mas isso não a assustou minimamente. Limitou-se a pensar em cadeiras e lareiras e estendeu a mão ansiosamente em direção à porta.</p>
+                <p>A sua mão não conseguia chegar perto. Alguma parede invisível impedia-a a cerca de trinta centímetros da porta. Sophie picou-a com um dedo irritado. Quando isso não fez diferença, picou-o com a bengala. A parede parecia cobrir toda a porta, desde o alto que a sua bengala alcançava até à urze que brotava debaixo do degrau.</p>
+                <p>"Abra!" Sophie gargalhou para a parede.</p>
+                <p>Isso não fez qualquer diferença para a parede.</p>
+                <p>"Muito bem", disse Sophie. “Vou encontrar a sua porta das traseiras.” Ela coxeava em direção ao canto esquerdo do castelo, por ser o mais próximo e ligeiramente mais baixo. Mas não conseguiu contornar a esquina. A parede invisível deteve-a novamente assim que chegou à altura das irregulares pedras angulares negras. Nesse momento, Sophie disse uma palavra que aprendera com Martha, que nem as senhoras idosas nem as raparigas deveriam saber, e subiu a colina no sentido contrário ao dos ponteiros do relógio até ao canto direito do castelo. Não havia ali qualquer barreira. Ela virou a esquina e coxeava ansiosamente em direção à segunda grande porta negra no meio daquele lado do castelo.</p>
+                <p>Havia uma barreira sobre essa porta também.</p>
+                <p>Sophie encarou-a com raiva. “Acho isto muito pouco acolhedor!” disse ela.</p>
+            </section>
+
+            <!-- CAPÍTULO 4 -->
+            <section class="chapter-section" id="cap-4" data-title="Capítulo Quatro">
+                <h1 class="chapter-title">Capítulo Quatro</h1>
+                <h2 class="chapter-subtitle">Em que Sophie descobre várias coisas estranhas</h2>
+                <p>Quando Sophie acordou, a luz do dia inundava-a. Como Sophie não se lembrava de nenhuma janela no castelo, a sua primeira ideia foi que tinha adormecido a enfeitar chapéus e sonhado que estava a sair de casa. O fogo à sua frente reduzira-se a um carvão rosado e cinzas brancas, o que a convenceu de que certamente sonhara com um demónio do fogo. Mas os seus primeiros movimentos disseram-lhe que havia algumas coisas com as quais ela não tinha sonhado. Havia estalidos agudos por todo o seu corpo.</p>
+                <p>"Ai!" exclamou ela. "Estou toda dorida!" A voz que exclamou era um chiado fraco e rachado. Ela levou as suas mãos nodosas ao rosto e sentiu rugas. Nesse momento, descobriu que estivera em estado de choque o dia inteiro. Estava muito, muito zangada com a Bruxa das Terras Desoladas por lhe ter feito aquilo, enormemente, enormemente zangada. "Invadir lojas e envelhecer as pessoas!" exclamou ela. "Oh, o que eu não farei com ela!"</p>
+                <p>A sua raiva fê-la saltar no meio de uma saraivada de estalos e rangidos e coxear até à janela inesperada. Ficava acima da bancada. Para seu completo espanto, a vista dali era de uma cidade portuária. Ela podia ver uma rua inclinada e sem pavimento, ladeada por pequenas casas de aspeto bastante humilde, e mastros que se projetavam para lá dos telhados. Para lá dos mastros, ela vislumbrou o mar, algo que nunca tinha visto em toda a sua vida.</p>
+                <p>“Onde estou?” Sophie perguntou ao crânio de pé na bancada. “Eu não espero que responda a isso, minha amiga”, acrescentou apressadamente, lembrando-se de que aquele era o castelo de um mago, e virou-se para espreitar o quarto.</p>
+                <p>Era uma divisão muito pequena, com pesadas vigas pretas no teto.</p>
+                <p>À luz do dia, estava incrivelmente sujo. As pedras do chão estavam manchadas e engorduradas, as cinzas acumulavam-se dentro da lareira e as teias de aranha pendiam em madeixas poeirentas das vigas. Havia uma camada de pó no crânio. Sophie limpou-o distraidamente enquanto ia espreitar para o lavatório ao lado da bancada. Ela estremeceu ao ver a gosma rosa e cinzenta ali e a gosma branca a pingar da bomba lá em cima. Howl obviously não se importava com a miséria em que viviam os seus criados.</p>
+                <p>O resto do castelo devia estar para além de uma ou outra das quatro portas baixas pretas em redor da sala. Sophie abriu a mais próxima, na parede do fundo, para lá da bancada. Havia uma casa de banho grande além dele. De certa forma, era uma casa de banho que normalmente se encontraria apenas num palácio, repleta de luxos como uma sanita interior, uma cabine de duche, uma banheira imensa com pés de garra e espelhos em todas as paredes. Mas era ainda mais sujo do que o outro quarto. Sophie fez uma careta ao sair da sanita, estremeceu com a cor da banheira, recuou perante as ervas daninhas verdes que cresciam no duche e evitou facilement olhar para a sua forma enrugada nos espelhos, porque o vidro estava coberto de manchas e filetes de substâncias sem nome. As próprias substâncias sem nome estavam amontoadas numa prateleira muito grande sobre a banheira. Estavam em frascos, caixas, tubos e centenas de pacotes castanhos e sacos de papel rasgados. O maior pote tinha um nome. Chamava-se PODER SECANTE em letras tortas. Sophie não tinha a certeza se deveria haver um D ou não. Ela pegou num pacote aleatoriamente. Tinha PELE rabiscado nele, e ela voltou a colocá-lo apressadamente. Outro pote dizia OLHOS com a mesma caligrafia. Um tubo dizia PARA DECOMPOSIÇÃO.</p>
+            </section>
+
+            <!-- CAPÍTULO 5 -->
+            <section class="chapter-section" id="cap-5" data-title="Capítulo Cinco">
+                <h1 class="chapter-title">Capítulo Cinco</h1>
+                <h2 class="chapter-subtitle">Onde há limpezas e mais limpezas</h2>
+                <p>A única coisa a fazer, decidiu Sophie, era mostrar a Howl que era uma excelente empregada de limpeza, um verdadeiro tesouro. Amarrou um pano velho aos seus finos cabelos brancos, arregaçou as mangas dos seus braços magros e enrolou uma toalha de mesa velha do armário das vassouras à sua volta como se fosse um avental. Era um alívio pensar que havia apenas quatro divisões para limpar em vez de um castelo inteiro.</p>
+                <p>Ela pegou num balde e numa vassoura e começou a trabalhar.</p>
+                <p>“O que está a fazer?” gritaram Michael e Calcifer num coro horrorizado.</p>
+                <p>“A limpar”, respondeu Sophie firmemente. “O lugar é uma vergonha.”</p>
+                <p>Calcifer disse: “Não precisa disso”, e Michael murmurou: “A coruja vai expulsá-la!”, mas Sophie ignorou-os. Nuvens de poeira voavam.</p>
+                <p>No meio disto, ouviu-se outra série de batidas na porta. Calcifer levantou-se furioso, gritando: “Porta de Porthaven!” e deu um grande espirro crepitante que lançou faíscas roxas por entre as nuvens de poeira.</p>
+                <p>Michael saiu da bancada e dirigiu-se para a porta. Sophie espreitou por entre o pó que estava a levantar e viu que desta vez Michael rodou a maçaneta quadrada da porta de modo a que o lado com uma mancha azul de tinta ficasse para baixo. Depois abriu a porta para a rua que sevia pela janela.</p>
+            </section>
+
+            <!-- CAPÍTULO 6 -->
+            <section class="chapter-section" id="cap-6" data-title="Capítulo Seis">
+                <h1 class="chapter-title">Capítulo Seis</h1>
+                <h2 class="chapter-subtitle">Em que Howl expressa os seus sentimentos com lodo verde</h2>
+                <p>Howl não saiu nesse dia, nem nos dias seguintes. Sophie sentou-se quieta na cadeira perto da lareira, mantendo-se afastada dele e a pensar. Percebeu que, por muito que Howl merecesse, tinha descarregado os seus sentimentos no castelo quando, na verdade, estava zangada com a Bruxa das Terras Desoladas. E estava um pouco perturbada com a ideia de estar ali sob falsos pretextos. Howl podia pensar que Calcifer gostava dela, mas Sophie sabia que Calcifer simplesmente aproveitara a oportunidade para fazer um acordo com ela. Sophie achava que tinha desiludido Calcifer. Este estado de espírito não durou muito tempo. Sophie descobriu uma pilha de roupa de Michael que precisavam de reparação. Tirou o dedal, a tesoura e a linha do bolso de costura e começou a trabalhar. Nessa noite, estava entusiasmada o suficiente para participar na musiquinha tola de Calcifer sobre panelas.</p>
+                <p>"Feliz com o seu trabalho?", disse Howl, sarcasticamente.</p>
+                <p>"Preciso de mais coisas para fazer", disse Sophie.</p>
+                <p>“O meu fato velho precisa de arranjos, se precisa de se manter ocupado”, disse Howl.</p>
+                <p>Isso pareceu significar que Howl já não estava irritado. A Sophie ficou aliviada. Ela quase se assustou naquela manhã. Era claro que Howl ainda não tinha conquistado a rapariga que queria. Sophie ouviu Michael a fazer perguntas bastante óbvias sobre isso, e Howl a esquivar-se habilmente de responder a qualquer uma delas. “Ele é um esquivador”, Sophie murmurou para um par de meias de Michael. “Não consegue encarar a sua própria maldade.” Observou Howl inquieto e ocupado para esconder o seu descontentamento.</p>
+                <p>Na bancada, Howl trabalhava muito mais e mais rápido do que Michael, criando feitiços de forma especializada, mas desleixada. Pela expressão no rosto de Michael, a maioria dos feitiços eram incomuns e difíceis de fazer. Mas Howl interrompia um feitiço a meio e subia a correr para o quarto para verificar algo oculto — e sem dúvida sinistro — que se passava lá em cima, e logo a seguir saía a correr para o quintal para mexer num feitiço complexo. Sophie abriu a porta uma frincha e ficou bastante surpreendida ao ver o elegante mago ajoelhado na lama, com as mangas compridas atadas atrás do pescoço para não atrapalharem enquanto colocava cuidadosamente um emaranhado de metal engordurado numa espécie de estrutura especial.</p>
+            </section>
+
+        </article>
+
+        <!-- VISTA AUDIOBOOK -->
+        <div class="audiobook-view" id="audiobook-view">
+            <div class="audiobook-cover"></div>
+            <div class="audiobook-info">
+                <h2 id="audiobook-title-text">O Castelo Andante</h2>
+                <p id="audiobook-chapter-text">Capítulo 1 : Em que Sophie fala com chapéus</p>
+            </div>
+        </div>
+
+        <!-- VISTA RSVP (LEITURA RÁPIDA) -->
+        <div class="rsvp-view" id="rsvp-view">
+            <div class="rsvp-counter" id="rsvp-counter">Palavra 1 de 100</div>
+            <div class="rsvp-display-box" id="rsvp-display-box">
+                <!-- Palavra com ORP renderizada aqui -->
+            </div>
+        </div>
+    </main>
+
+    <!-- RODAPÉ -->
+    <footer class="bottom-bar">
+        <div class="tts-player-bar" id="tts-player-bar">
+            <button onclick="ttsRecuar()"><span class="material-symbols-rounded">skip_previous</span></button>
+            <button onclick="togglePlayTTS()" id="tts-play-btn"><span class="material-symbols-rounded" id="tts-play-icon">play_arrow</span></button>
+            <button onclick="ttsAvancar()"><span class="material-symbols-rounded">skip_next</span></button>
+        </div>
+
+        <div class="progress-track"><div class="progress-fill" id="footer-progress-fill"></div></div>
+        <div class="progress-info"><span id="footer-page-text">Página 10 / 301</span> • <span id="footer-percent-text">5%</span></div>
+    </footer>
+    <script src="read.js"></script>
+</body>
+</html>
